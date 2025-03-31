@@ -9,9 +9,9 @@ const crearImagen = (portada: string, titulo: string): HTMLImageElement => {
   return imagen;
 };
 
-const crearParrafo = (texto: string) => {
+const crearParrafo = (titulo: string, texto: string) => {
   const parrafo = document.createElement("p");
-  parrafo.textContent = texto;
+  parrafo.textContent = `${titulo}: ${texto}`;
   return parrafo;
 };
 
@@ -37,16 +37,16 @@ const crearPersonaje = (pelicula: Personaje): HTMLDivElement => {
   const imagen = crearImagen(pelicula.imagen, pelicula.nombre);
   personajeContenedor.appendChild(imagen);
 
-  const nombre = crearParrafo(pelicula.nombre);
+  const nombre = crearParrafo("Nombre",pelicula.nombre);
   personajeContenedor.appendChild(nombre);
 
-  const apodo = crearParrafo(pelicula.apodo);
+  const apodo = crearParrafo("Apodo",pelicula.apodo);
   personajeContenedor.appendChild(apodo);
 
-  const especialidad = crearParrafo(pelicula.especialidad);
+  const especialidad = crearParrafo("Especialidad",pelicula.especialidad);
   personajeContenedor.appendChild(especialidad);
 
-  const amigo = crearParrafo(pelicula.amigo);
+  const amigo = crearParrafo("Amigo de",pelicula.amigo);
   personajeContenedor.appendChild(amigo);
 
    const habilidades = crearListaHabilidades(pelicula.habilidades);
