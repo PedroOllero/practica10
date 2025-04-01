@@ -1,6 +1,8 @@
 import { obtenerPersonajes } from "./api";
 import { Personaje } from "./modelo";
 
+const personajes = await obtenerPersonajes();
+
 const crearImagen = (portada: string, titulo: string): HTMLImageElement => {
   const imagen = document.createElement("img");
   imagen.src = `http://localhost:3000/${portada}`;
@@ -54,8 +56,7 @@ const crearPersonaje = (pelicula: Personaje): HTMLDivElement => {
   return personajeContenedor;
 };
 
-const pintarPersonaje = async () => {
-  const personajes = await obtenerPersonajes();
+const pintarPersonaje = async (personajes: Personaje[]) => {
   const listado = document.querySelector("#contenedor-personajes");
 
   if (listado && listado instanceof HTMLDivElement) {
@@ -70,20 +71,38 @@ const pintarPersonaje = async () => {
 
 const textInput = (): void => {
   const input = document.getElementById("input");
-  if (input && input instanceof HTMLInputElement) {
+  const boton = document.getElementById("boton");
+  const contenedorPersonajes = document.getElementById("contenedor-personajes");
+
+  if (
+    input &&
+    input instanceof HTMLInputElement &&
+    boton &&
+    boton instanceof HTMLButtonElement &&
+    contenedorPersonajes
+  ) {
+    let filtro: Personaje[] = [];
+
+    boton.addEventListener("click", () => {
+      contenedorPersonajes.innerHTML = "";
+      pintarPersonaje(filtro);
+      console.log("buscar", filtro);
+    });
+
     input.addEventListener("input", async () => {
       const texto = input.value.toLocaleLowerCase();
       const personajes: Personaje[] = await obtenerPersonajes();
-      const filtro: Personaje[] = personajes.filter((item) =>
+      filtro = personajes.filter((item) =>
         item.nombre.toLocaleLowerCase().includes(texto)
       );
-      console.log(filtro);
     });
   } else {
-    throw new Error("Input element not found or is not an HTMLInputElement");
+    throw new Error(
+      "No se ha encontrado el input, el boton o el contenedor de personaje"
+    );
   }
 };
 
-textInput();
 
-pintarPersonaje();
+pintarPersonaje(personajes);
+textInput();
