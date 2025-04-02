@@ -1,7 +1,7 @@
-import { obtenerPersonajes } from "./api";
+import { buscarPersonaje, obtenerPersonajes } from "./api";
 import { Personaje } from "./modelo";
 
-const personajes = await obtenerPersonajes();
+let personajes = await obtenerPersonajes();
 
 const crearImagen = (portada: string, titulo: string): HTMLImageElement => {
   const imagen = document.createElement("img");
@@ -85,16 +85,12 @@ const textInput = (): void => {
 
     boton.addEventListener("click", () => {
       contenedorPersonajes.innerHTML = "";
-      pintarPersonaje(filtro);
-      console.log("buscar", filtro);
+      pintarPersonaje(personajes);
     });
 
     input.addEventListener("input", async () => {
       const texto = input.value.toLocaleLowerCase();
-      const personajes: Personaje[] = await obtenerPersonajes();
-      filtro = personajes.filter((item) =>
-        item.nombre.toLocaleLowerCase().includes(texto)
-      );
+      personajes = await buscarPersonaje(texto);
     });
   } else {
     throw new Error(
@@ -102,7 +98,6 @@ const textInput = (): void => {
     );
   }
 };
-
 
 pintarPersonaje(personajes);
 textInput();
